@@ -8,8 +8,14 @@ export const getAllWorkouts = (req: Request, res: Response) => {
 }
 
 export const getOneWorkout = (req: Request, res: Response) => {
-  const workout = workoutService.getOneWorkout()
-  res.send(`Get workout ${req.params.workoutId}`)
+  const {
+    params: { workoutId },
+  } = req
+
+  if (!workoutId) return
+
+  const workout = workoutService.getOneWorkout(workoutId)
+  res.send({ status: 'OK', data: workout })
 }
 
 export const createNewWorkout = (req: Request, res: Response) => {
@@ -30,11 +36,24 @@ export const createNewWorkout = (req: Request, res: Response) => {
 }
 
 export const updateOneWorkout = (req: Request, res: Response) => {
-  const updatedWorkout = workoutService.updateOneWorkout()
-  res.send(`Update workout ${req.params.workoutId}`)
+  const {
+    body,
+    params: { workoutId },
+  } = req
+
+  if (!workoutId) return
+
+  const updatedWorkout = workoutService.updateOneWorkout(workoutId, body)
+  res.send({ status: 'OK', data: updatedWorkout })
 }
 
 export const deleteOneWorkout = (req: Request, res: Response) => {
-  workoutService.deleteOneWorkout()
-  res.send(`Delete workout ${req.params.workoutId}`)
+  const {
+    params: { workoutId },
+  } = req
+
+  if (!workoutId) return
+
+  workoutService.deleteOneWorkout(workoutId)
+  res.status(204).send({ status: 'OK' })
 }
